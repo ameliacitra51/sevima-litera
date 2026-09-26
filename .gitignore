@@ -1,35 +1,39 @@
-# Node
-node_modules/
-dist/
-.vite/
-
-# Environment
-.env
-.env.*
-!.env.example
-
-# Python
-__pycache__/
-*.py[cod]
+# Python & Virtual Environments
 .venv/
 venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+*.pyo
 
-# Testing
+# Node & Dependencies
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Environment variables & secrets
+.env
+.env.production
+*.pem
+*.key
+
+# Testing & Coverage
 .pytest_cache/
 .coverage
 htmlcov/
 
-# Database
-*.sqlite3
-*.db
-
-# IDE
+# Editor & OS artifacts
 .vscode/
-!.vscode/extensions.json
-
-# OS
-.DS_Store
+.idea/
 Thumbs.db
-
-# Logs
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 *.log
+
+# TypeScript build info
+*.tsbuildinfo
