@@ -1,6 +1,6 @@
 # LITERA — Digital Literacy & Learning Platform
 
-LITERA is a modern digital literacy and educational platform designed for high-school and university students. The platform provides curriculum-aligned courses, modules, lessons, quizzes, learning progress tracking, bookmarks, achievements, and community discussions.
+LITERA is a modern digital literacy and educational platform designed for high-school and university students. The current implementation provides authentication, curriculum-aligned courses, modules, lessons, public learning pages, demo seed data, and an admin catalog workspace. Quiz, enrollment, progress, and community features remain planned roadmap items.
 
 ---
 
@@ -126,12 +126,12 @@ npm run dev
 * [x] **Phase 3**: Database & Migrations (catalog tables, Alembic migrations, and seed data)
 * [x] **Phase 4**: Authentication foundation (User model, Argon2, JWT, register/login/me/logout)
 * [x] **Phase 5**: Courses & Lessons read flow (database, public API, and frontend catalog)
-* [ ] **Phase 5b**: Admin Course/Lesson CRUD, enrollment, and lesson progress
-* [ ] **Phase 6**: Progress Tracking
+* [x] **Phase 5b**: Admin Course/Module/Lesson CRUD API, role guard, and admin dashboard UI
+* [ ] **Phase 5c**: Enrollment and lesson progress
+* [ ] **Phase 6**: Student Dashboard
 * [ ] **Phase 7**: Quizzes & Scoring
-* [ ] **Phase 8**: Student Dashboard
-* [ ] **Phase 9**: Community Discussions & Likes
-* [ ] **Phase 10**: Admin Management & Analytics
+* [ ] **Phase 8**: Community Discussions & Likes
+* [ ] **Phase 9**: Admin Management & Analytics
 * [ ] **Phase 11**: Testing & Refactoring
 * [ ] **Phase 12**: AI Layer (Optional Auxiliary Service)
 * [ ] **Phase 13**: Final Audit & Production Readiness

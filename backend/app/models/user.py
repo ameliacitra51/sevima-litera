@@ -31,23 +31,12 @@ class User(TimestampMixin, Base):
         Index("ix_users_username", "username", unique=True),
     )
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     username: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     full_name: Mapped[str] = mapped_column(String(150), nullable=False)
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
-    role: Mapped[UserRole] = mapped_column(
-        SqlEnum(UserRole, name="user_role", native_enum=False, length=20),
-        nullable=False,
-        default=UserRole.STUDENT,
-        server_default=UserRole.STUDENT.value,
-    )
-    is_active: Mapped[bool] = mapped_column(
-        Boolean, nullable=False, default=True, server_default="true"
-    )
+    role: Mapped[UserRole] = mapped_column(SqlEnum(UserRole, name="user_role", native_enum=False, length=20), nullable=False, default=UserRole.STUDENT, server_default=UserRole.STUDENT.value)
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True, server_default="true")
 
-    created_courses: Mapped[list[Course]] = relationship(
-        back_populates="creator",
-    )
+    created_courses: Mapped[list[Course]] = relationship(back_populates="creator")

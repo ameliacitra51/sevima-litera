@@ -1,108 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import {
-  ArrowRight,
-  BookOpen,
-  BookOpenCheck,
-  BrainCircuit,
-  CheckCircle2,
-  Clock3,
-  Layers3,
-  Sparkles,
-  Target,
-} from 'lucide-react';
+import { ArrowRight, BookOpen, BookOpenCheck, BrainCircuit, CheckCircle2, Clock3, Layers3, Sparkles, Target } from 'lucide-react';
 import { catalogService } from '@/services/catalog';
 import { useAuth } from '@/context/AuthContext';
 import { ErrorState, LoadingState } from '@/components/ApiState';
 import type { CourseLevel } from '@/types/catalog';
 
-const levelLabel: Record<CourseLevel, string> = {
-  BEGINNER: 'Beginner',
-  INTERMEDIATE: 'Intermediate',
-  ADVANCED: 'Advanced',
-};
-
+const levelLabel: Record<CourseLevel, string> = { BEGINNER: 'Beginner', INTERMEDIATE: 'Intermediate', ADVANCED: 'Advanced' };
 const benefitCards = [
-  {
-    icon: BookOpenCheck,
-    title: 'Belajar terarah',
-    text: 'Ikuti materi yang tersusun rapi dari konsep dasar hingga praktik nyata.',
-    color: 'bg-indigo-50 text-indigo-600',
-  },
-  {
-    icon: BrainCircuit,
-    title: 'Pahami lebih dalam',
-    text: 'Kembangkan cara berpikir kritis untuk menghadapi informasi di dunia digital.',
-    color: 'bg-violet-50 text-violet-600',
-  },
-  {
-    icon: Target,
-    title: 'Tumbuh setiap hari',
-    text: 'Bangun kebiasaan belajar yang konsisten dengan lesson singkat dan bermakna.',
-    color: 'bg-emerald-50 text-emerald-600',
-  },
+  { icon: BookOpenCheck, title: 'Belajar terarah', text: 'Ikuti materi yang tersusun rapi dari konsep dasar hingga praktik nyata.', color: 'bg-indigo-50 text-indigo-600' },
+  { icon: BrainCircuit, title: 'Pahami lebih dalam', text: 'Kembangkan cara berpikir kritis untuk menghadapi informasi di dunia digital.', color: 'bg-violet-50 text-violet-600' },
+  { icon: Target, title: 'Tumbuh setiap hari', text: 'Bangun kebiasaan belajar yang konsisten dengan lesson singkat dan bermakna.', color: 'bg-emerald-50 text-emerald-600' },
 ];
 
 export const HomePage: React.FC = () => {
   const { user } = useAuth();
-  const coursesQuery = useQuery({
-    queryKey: ['featured-courses'],
-    queryFn: () => catalogService.listCourses({ page: 1, page_size: 3 }),
-  });
-
-  return (
-    <div className="overflow-hidden">
-      <section className="relative bg-slate-950 text-white">
-        <div className="absolute -left-32 -top-32 h-80 w-80 rounded-full bg-indigo-500/30 blur-3xl" />
-        <div className="absolute -bottom-40 right-0 h-96 w-96 rounded-full bg-emerald-400/20 blur-3xl" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-indigo-100 backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5 text-emerald-300" />
-              Ruang belajar untuk generasi digital
-            </div>
-            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-              Belajar lebih cerdas, <span className="text-emerald-300">melangkah lebih jauh.</span>
-            </h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
-              LITERA membantu kamu memahami dunia digital, mengevaluasi informasi, dan membangun cara berpikir kritis melalui pengalaman belajar yang sederhana dan terstruktur.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/courses" className="inline-flex items-center gap-2 rounded-xl bg-emerald-400 px-5 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-emerald-950/30 transition hover:bg-emerald-300">
-                Mulai belajar <ArrowRight className="h-4 w-4" />
-              </Link>
-              {user ? (
-                <Link to="/profile" className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15">Lihat profil saya</Link>
-              ) : (
-                <Link to="/register" className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15">Buat akun gratis</Link>
-              )}
-            </div>
-            <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-xs text-slate-400">
-              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-300" />Materi terstruktur</span>
-              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-300" />Belajar sesuai ritme</span>
-              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-300" />Dibuat untuk pelajar</span>
-            </div>
-          </div>
-
-          <div className="relative mx-auto w-full max-w-md lg:ml-auto">
-            <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-indigo-500/30 to-emerald-300/20 blur-2xl" />
-            <div className="relative rounded-[2rem] border border-white/15 bg-white/10 p-5 shadow-2xl backdrop-blur-xl">
-              <div className="flex items-center justify-between border-b border-white/10 pb-5"><div className="flex items-center gap-3"><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-300 text-slate-950"><BookOpen className="h-5 w-5" /></div><div><p className="text-sm font-bold">Learning space</p><p className="text-xs text-slate-400">Your next chapter starts here</p></div></div><span className="rounded-full bg-emerald-300/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-200">Active</span></div>
-              <div className="space-y-3 py-5"><div className="rounded-2xl bg-white/10 p-4"><div className="flex items-center justify-between"><span className="text-xs font-semibold text-slate-300">Learning path</span><span className="text-xs font-bold text-emerald-300">2 of 4</span></div><div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10"><div className="h-full w-1/2 rounded-full bg-emerald-300" /></div></div><div className="grid grid-cols-2 gap-3"><div className="rounded-2xl bg-indigo-400/15 p-4"><Layers3 className="h-5 w-5 text-indigo-200" /><p className="mt-4 text-2xl font-black">12</p><p className="text-xs text-slate-400">Materi pilihan</p></div><div className="rounded-2xl bg-violet-400/15 p-4"><Clock3 className="h-5 w-5 text-violet-200" /><p className="mt-4 text-2xl font-black">10m</p><p className="text-xs text-slate-400">Rata-rata lesson</p></div></div></div>
-              <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/30 p-4"><div className="flex -space-x-2"><span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-900 bg-emerald-300 text-xs font-bold text-slate-900">L</span><span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-900 bg-indigo-300 text-xs font-bold text-slate-900">+</span></div><p className="text-xs leading-relaxed text-slate-300">Satu langkah kecil hari ini bisa mengubah cara kamu melihat dunia.</p></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-5 md:grid-cols-3">{benefitCards.map(({ icon: Icon, title, text, color }) => <div key={title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"><div className={`flex h-11 w-11 items-center justify-center rounded-xl ${color}`}><Icon className="h-5 w-5" /></div><h2 className="mt-5 text-lg font-bold text-slate-900">{title}</h2><p className="mt-2 text-sm leading-relaxed text-slate-500">{text}</p></div>)}</div>
-      </section>
-
-      <section className="bg-slate-50 py-16"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="text-sm font-bold uppercase tracking-widest text-indigo-600">Pilihan untukmu</p><h2 className="mt-2 text-3xl font-black text-slate-900">Mulai dari course pilihan</h2><p className="mt-2 text-slate-500">Temukan topik yang relevan dan mulai belajar dengan langkahmu sendiri.</p></div><Link to="/courses" className="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-700">Lihat semua course <ArrowRight className="h-4 w-4" /></Link></div>{coursesQuery.isLoading ? <LoadingState label="Menyiapkan course pilihan..." /> : coursesQuery.isError ? <div className="mt-8"><ErrorState message="Course belum dapat dimuat. Pastikan backend dan data demo sudah aktif." onRetry={() => coursesQuery.refetch()} /></div> : coursesQuery.data?.items.length === 0 ? <div className="mt-8 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">Belum ada course. Jalankan demo seed untuk mengisi katalog.</div> : <div className="mt-8 grid gap-5 md:grid-cols-3">{coursesQuery.data?.items.map((course) => <Link key={course.id} to={`/courses/${course.slug}`} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"><div className="h-28 bg-gradient-to-br from-indigo-600 via-violet-500 to-emerald-400 p-4"><span className="rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-bold uppercase text-white">{levelLabel[course.level]}</span></div><div className="p-5"><p className="text-xs font-bold uppercase tracking-wide text-indigo-600">{course.category.name}</p><h3 className="mt-2 text-lg font-bold text-slate-900 group-hover:text-indigo-600">{course.title}</h3><p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-500">{course.description}</p><span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-indigo-600">Mulai course <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></span></div></Link>)}</div>}</div></section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8"><div className="relative overflow-hidden rounded-[2rem] bg-indigo-600 px-6 py-12 text-center text-white shadow-xl shadow-indigo-200 md:px-12"><div className="absolute -right-16 -top-24 h-64 w-64 rounded-full bg-white/10" /><div className="absolute -bottom-32 -left-16 h-64 w-64 rounded-full bg-emerald-300/15" /><div className="relative"><h2 className="text-3xl font-black md:text-4xl">Siap memulai perjalanan belajarmu?</h2><p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-indigo-100 md:text-base">Pilih satu topik, pelajari satu lesson, dan jadikan setiap langkah berarti.</p><Link to="/courses" className="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-indigo-700 transition hover:bg-indigo-50">Jelajahi course <ArrowRight className="h-4 w-4" /></Link></div></div></section>
-    </div>
-  );
+  const coursesQuery = useQuery({ queryKey: ['featured-courses'], queryFn: () => catalogService.listCourses({ page: 1, page_size: 3 }) });
+  return <div className="overflow-hidden"><section className="relative bg-slate-950 text-white"><div className="absolute -left-32 -top-32 h-80 w-80 rounded-full bg-indigo-500/30 blur-3xl" /><div className="absolute -bottom-40 right-0 h-96 w-96 rounded-full bg-emerald-400/20 blur-3xl" /><div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:px-8"><div className="max-w-2xl"><div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-indigo-100 backdrop-blur"><Sparkles className="h-3.5 w-3.5 text-emerald-300" />Ruang belajar untuk generasi digital</div><h1 className="mt-6 text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-6xl">Belajar lebih cerdas, <span className="text-emerald-300">melangkah lebih jauh.</span></h1><p className="mt-6 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">LITERA membantu kamu memahami dunia digital, mengevaluasi informasi, dan membangun cara berpikir kritis melalui pengalaman belajar yang sederhana dan terstruktur.</p><div className="mt-8 flex flex-wrap gap-3"><Link to="/courses" className="inline-flex items-center gap-2 rounded-xl bg-emerald-400 px-5 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-emerald-950/30 transition hover:bg-emerald-300">Mulai belajar <ArrowRight className="h-4 w-4" /></Link>{user ? <Link to="/profile" className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15">Lihat profil saya</Link> : <Link to="/register" className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15">Buat akun gratis</Link>}</div><div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-xs text-slate-400"><span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-300" />Materi terstruktur</span><span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-300" />Belajar sesuai ritme</span><span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-300" />Dibuat untuk pelajar</span></div></div><div className="relative mx-auto w-full max-w-md lg:ml-auto"><div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-indigo-500/30 to-emerald-300/20 blur-2xl" /><div className="relative rounded-[2rem] border border-white/15 bg-white/10 p-5 shadow-2xl backdrop-blur-xl"><div className="flex items-center gap-3 border-b border-white/10 pb-5"><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-300 text-slate-950"><BookOpen className="h-5 w-5" /></div><div><p className="text-sm font-bold">Learning space</p><p className="text-xs text-slate-400">Your next chapter starts here</p></div></div><div className="space-y-3 py-5"><div className="rounded-2xl bg-white/10 p-4"><div className="flex items-center justify-between"><span className="text-xs font-semibold text-slate-300">Learning path</span><span className="text-xs font-bold text-emerald-300">Start here</span></div><div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10"><div className="h-full w-1/3 rounded-full bg-emerald-300" /></div></div><div className="grid grid-cols-2 gap-3"><div className="rounded-2xl bg-indigo-400/15 p-4"><Layers3 className="h-5 w-5 text-indigo-200" /><p className="mt-4 text-2xl font-black">Course</p><p className="text-xs text-slate-400">Materi pilihan</p></div><div className="rounded-2xl bg-violet-400/15 p-4"><Clock3 className="h-5 w-5 text-violet-200" /><p className="mt-4 text-2xl font-black">10m</p><p className="text-xs text-slate-400">Rata-rata lesson</p></div></div></div></div></div></div></section><section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8"><div className="grid gap-5 md:grid-cols-3">{benefitCards.map(({ icon: Icon, title, text, color }) => <div key={title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"><div className={`flex h-11 w-11 items-center justify-center rounded-xl ${color}`}><Icon className="h-5 w-5" /></div><h2 className="mt-5 text-lg font-bold text-slate-900">{title}</h2><p className="mt-2 text-sm leading-relaxed text-slate-500">{text}</p></div>)}</div></section><section className="bg-slate-50 py-16"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="text-sm font-bold uppercase tracking-widest text-indigo-600">Pilihan untukmu</p><h2 className="mt-2 text-3xl font-black text-slate-900">Mulai dari course pilihan</h2><p className="mt-2 text-slate-500">Temukan topik yang relevan dan mulai belajar dengan langkahmu sendiri.</p></div><Link to="/courses" className="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-700">Lihat semua course <ArrowRight className="h-4 w-4" /></Link></div>{coursesQuery.isLoading ? <LoadingState label="Menyiapkan course pilihan..." /> : coursesQuery.isError ? <div className="mt-8"><ErrorState message="Course belum dapat dimuat. Pastikan backend dan data demo sudah aktif." onRetry={() => coursesQuery.refetch()} /></div> : coursesQuery.data?.items.length === 0 ? <div className="mt-8 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">Belum ada course. Jalankan demo seed untuk mengisi katalog.</div> : <div className="mt-8 grid gap-5 md:grid-cols-3">{coursesQuery.data?.items.map((course) => <Link key={course.id} to={`/courses/${course.slug}`} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"><div className="h-28 bg-gradient-to-br from-indigo-600 via-violet-500 to-emerald-400 p-4"><span className="rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-bold uppercase text-white">{levelLabel[course.level]}</span></div><div className="p-5"><p className="text-xs font-bold uppercase tracking-wide text-indigo-600">{course.category.name}</p><h3 className="mt-2 text-lg font-bold text-slate-900 group-hover:text-indigo-600">{course.title}</h3><p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-500">{course.description}</p><span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-indigo-600">Mulai course <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></span></div></Link>)}</div>}</div></section><section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8"><div className="relative overflow-hidden rounded-[2rem] bg-indigo-600 px-6 py-12 text-center text-white shadow-xl shadow-indigo-200 md:px-12"><div className="relative"><h2 className="text-3xl font-black md:text-4xl">Siap memulai perjalanan belajarmu?</h2><p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-indigo-100 md:text-base">Pilih satu topik, pelajari satu lesson, dan jadikan setiap langkah berarti.</p><Link to="/courses" className="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-indigo-700 transition hover:bg-indigo-50">Jelajahi course <ArrowRight className="h-4 w-4" /></Link></div></div></section></div>;
 };
