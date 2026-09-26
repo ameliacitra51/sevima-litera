@@ -1,128 +1,108 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { healthService } from '@/services/api';
-import { CheckCircle2, AlertCircle, RefreshCw, Layers, ShieldCheck, Database, Code2 } from 'lucide-react';
+import {
+  ArrowRight,
+  BookOpen,
+  BookOpenCheck,
+  BrainCircuit,
+  CheckCircle2,
+  Clock3,
+  Layers3,
+  Sparkles,
+  Target,
+} from 'lucide-react';
+import { catalogService } from '@/services/catalog';
+import { useAuth } from '@/context/AuthContext';
+import { ErrorState, LoadingState } from '@/components/ApiState';
+import type { CourseLevel } from '@/types/catalog';
+
+const levelLabel: Record<CourseLevel, string> = {
+  BEGINNER: 'Beginner',
+  INTERMEDIATE: 'Intermediate',
+  ADVANCED: 'Advanced',
+};
+
+const benefitCards = [
+  {
+    icon: BookOpenCheck,
+    title: 'Belajar terarah',
+    text: 'Ikuti materi yang tersusun rapi dari konsep dasar hingga praktik nyata.',
+    color: 'bg-indigo-50 text-indigo-600',
+  },
+  {
+    icon: BrainCircuit,
+    title: 'Pahami lebih dalam',
+    text: 'Kembangkan cara berpikir kritis untuk menghadapi informasi di dunia digital.',
+    color: 'bg-violet-50 text-violet-600',
+  },
+  {
+    icon: Target,
+    title: 'Tumbuh setiap hari',
+    text: 'Bangun kebiasaan belajar yang konsisten dengan lesson singkat dan bermakna.',
+    color: 'bg-emerald-50 text-emerald-600',
+  },
+];
 
 export const HomePage: React.FC = () => {
-  const { data: health, isLoading, isError, error, refetch, isFetching } = useQuery({
-    queryKey: ['backend-health'],
-    queryFn: healthService.checkHealth,
-    retry: 1,
+  const { user } = useAuth();
+  const coursesQuery = useQuery({
+    queryKey: ['featured-courses'],
+    queryFn: () => catalogService.listCourses({ page: 1, page_size: 3 }),
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
-      {/* Hero Section */}
-      <section className="text-center space-y-4 max-w-3xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          Phase 2: Project Foundation Active
-        </div>
-        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
-          LITERA Learning Platform
-        </h1>
-        <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-          Digital literacy, information evaluation, and critical thinking platform for high-school and university students.
-        </p>
-      </section>
-
-      {/* Backend Connectivity Status Card */}
-      <section className="max-w-2xl mx-auto bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-indigo-50 text-indigo-600">
-              <Layers className="w-5 h-5" />
+    <div className="overflow-hidden">
+      <section className="relative bg-slate-950 text-white">
+        <div className="absolute -left-32 -top-32 h-80 w-80 rounded-full bg-indigo-500/30 blur-3xl" />
+        <div className="absolute -bottom-40 right-0 h-96 w-96 rounded-full bg-emerald-400/20 blur-3xl" />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-indigo-100 backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5 text-emerald-300" />
+              Ruang belajar untuk generasi digital
             </div>
-            <div>
-              <h2 className="text-base font-semibold text-slate-900">Backend Connectivity Check</h2>
-              <p className="text-xs text-slate-500">Querying FastAPI health endpoint via TanStack Query & Axios</p>
+            <h1 className="mt-6 text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+              Belajar lebih cerdas, <span className="text-emerald-300">melangkah lebih jauh.</span>
+            </h1>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
+              LITERA membantu kamu memahami dunia digital, mengevaluasi informasi, dan membangun cara berpikir kritis melalui pengalaman belajar yang sederhana dan terstruktur.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link to="/courses" className="inline-flex items-center gap-2 rounded-xl bg-emerald-400 px-5 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-emerald-950/30 transition hover:bg-emerald-300">
+                Mulai belajar <ArrowRight className="h-4 w-4" />
+              </Link>
+              {user ? (
+                <Link to="/profile" className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15">Lihat profil saya</Link>
+              ) : (
+                <Link to="/register" className="rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/15">Buat akun gratis</Link>
+              )}
             </div>
-          </div>
-          <button
-            onClick={() => refetch()}
-            disabled={isFetching}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition disabled:opacity-50"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${isFetching ? 'animate-spin' : ''}`} />
-            Refresh
-          </button>
-        </div>
-
-        {isLoading ? (
-          <div className="py-6 flex flex-col items-center justify-center space-y-2 text-slate-500">
-            <RefreshCw className="w-6 h-6 animate-spin text-indigo-600" />
-            <span className="text-xs">Connecting to backend at http://localhost:8000/api/v1/health...</span>
-          </div>
-        ) : isError ? (
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
-            <div className="space-y-1 text-xs">
-              <p className="font-semibold text-amber-900">Backend Server Not Detected</p>
-              <p className="text-amber-800">
-                {(error as Error)?.message || 'Failed to connect to FastAPI backend.'}
-              </p>
-              <p className="text-amber-700 mt-1">
-                Make sure the backend is running with: <code className="bg-amber-100 px-1 py-0.5 rounded font-mono">uvicorn app.main:app --reload</code>
-              </p>
+            <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-xs text-slate-400">
+              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-300" />Materi terstruktur</span>
+              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-300" />Belajar sesuai ritme</span>
+              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-300" />Dibuat untuk pelajar</span>
             </div>
           </div>
-        ) : (
-          <div className="space-y-3">
-            <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center gap-3">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-              <div className="text-xs text-emerald-900">
-                <span className="font-semibold">FastAPI Backend Connected: </span>
-                <span>{health?.service} v{health?.version} ({health?.environment})</span>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                <span className="text-slate-500 block">Service Status</span>
-                <span className="font-semibold text-slate-800 uppercase">{health?.status}</span>
-              </div>
-              <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                <span className="text-slate-500 block">Server Time (UTC)</span>
-                <span className="font-mono text-slate-800">
-                  {health?.timestamp ? new Date(health.timestamp).toLocaleTimeString() : 'N/A'}
-                </span>
-              </div>
+
+          <div className="relative mx-auto w-full max-w-md lg:ml-auto">
+            <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-indigo-500/30 to-emerald-300/20 blur-2xl" />
+            <div className="relative rounded-[2rem] border border-white/15 bg-white/10 p-5 shadow-2xl backdrop-blur-xl">
+              <div className="flex items-center justify-between border-b border-white/10 pb-5"><div className="flex items-center gap-3"><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-300 text-slate-950"><BookOpen className="h-5 w-5" /></div><div><p className="text-sm font-bold">Learning space</p><p className="text-xs text-slate-400">Your next chapter starts here</p></div></div><span className="rounded-full bg-emerald-300/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-200">Active</span></div>
+              <div className="space-y-3 py-5"><div className="rounded-2xl bg-white/10 p-4"><div className="flex items-center justify-between"><span className="text-xs font-semibold text-slate-300">Learning path</span><span className="text-xs font-bold text-emerald-300">2 of 4</span></div><div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10"><div className="h-full w-1/2 rounded-full bg-emerald-300" /></div></div><div className="grid grid-cols-2 gap-3"><div className="rounded-2xl bg-indigo-400/15 p-4"><Layers3 className="h-5 w-5 text-indigo-200" /><p className="mt-4 text-2xl font-black">12</p><p className="text-xs text-slate-400">Materi pilihan</p></div><div className="rounded-2xl bg-violet-400/15 p-4"><Clock3 className="h-5 w-5 text-violet-200" /><p className="mt-4 text-2xl font-black">10m</p><p className="text-xs text-slate-400">Rata-rata lesson</p></div></div></div>
+              <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/30 p-4"><div className="flex -space-x-2"><span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-900 bg-emerald-300 text-xs font-bold text-slate-900">L</span><span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-900 bg-indigo-300 text-xs font-bold text-slate-900">+</span></div><p className="text-xs leading-relaxed text-slate-300">Satu langkah kecil hari ini bisa mengubah cara kamu melihat dunia.</p></div>
             </div>
           </div>
-        )}
-      </section>
-
-      {/* Architecture Highlights */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto pt-6">
-        <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
-          <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-            <Code2 className="w-4 h-4" />
-          </div>
-          <h3 className="text-sm font-semibold text-slate-900">React + Vite + TypeScript</h3>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            Strict type safety, TanStack Query server caching, Tailwind CSS styling, and Axios interceptor architecture.
-          </p>
-        </div>
-
-        <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
-          <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
-            <ShieldCheck className="w-4 h-4" />
-          </div>
-          <h3 className="text-sm font-semibold text-slate-900">FastAPI Modular API</h3>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            Layered architecture with Pydantic validation, CORS middleware, centralized error handling, and health monitoring.
-          </p>
-        </div>
-
-        <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-sm space-y-2">
-          <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-            <Database className="w-4 h-4" />
-          </div>
-          <h3 className="text-sm font-semibold text-slate-900">PostgreSQL Ready</h3>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            SQLAlchemy 2.0 and Alembic migration foundation prepared for Phase 3 database modeling.
-          </p>
         </div>
       </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid gap-5 md:grid-cols-3">{benefitCards.map(({ icon: Icon, title, text, color }) => <div key={title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"><div className={`flex h-11 w-11 items-center justify-center rounded-xl ${color}`}><Icon className="h-5 w-5" /></div><h2 className="mt-5 text-lg font-bold text-slate-900">{title}</h2><p className="mt-2 text-sm leading-relaxed text-slate-500">{text}</p></div>)}</div>
+      </section>
+
+      <section className="bg-slate-50 py-16"><div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p className="text-sm font-bold uppercase tracking-widest text-indigo-600">Pilihan untukmu</p><h2 className="mt-2 text-3xl font-black text-slate-900">Mulai dari course pilihan</h2><p className="mt-2 text-slate-500">Temukan topik yang relevan dan mulai belajar dengan langkahmu sendiri.</p></div><Link to="/courses" className="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-700">Lihat semua course <ArrowRight className="h-4 w-4" /></Link></div>{coursesQuery.isLoading ? <LoadingState label="Menyiapkan course pilihan..." /> : coursesQuery.isError ? <div className="mt-8"><ErrorState message="Course belum dapat dimuat. Pastikan backend dan data demo sudah aktif." onRetry={() => coursesQuery.refetch()} /></div> : coursesQuery.data?.items.length === 0 ? <div className="mt-8 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">Belum ada course. Jalankan demo seed untuk mengisi katalog.</div> : <div className="mt-8 grid gap-5 md:grid-cols-3">{coursesQuery.data?.items.map((course) => <Link key={course.id} to={`/courses/${course.slug}`} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"><div className="h-28 bg-gradient-to-br from-indigo-600 via-violet-500 to-emerald-400 p-4"><span className="rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-bold uppercase text-white">{levelLabel[course.level]}</span></div><div className="p-5"><p className="text-xs font-bold uppercase tracking-wide text-indigo-600">{course.category.name}</p><h3 className="mt-2 text-lg font-bold text-slate-900 group-hover:text-indigo-600">{course.title}</h3><p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-500">{course.description}</p><span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-indigo-600">Mulai course <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></span></div></Link>)}</div>}</div></section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8"><div className="relative overflow-hidden rounded-[2rem] bg-indigo-600 px-6 py-12 text-center text-white shadow-xl shadow-indigo-200 md:px-12"><div className="absolute -right-16 -top-24 h-64 w-64 rounded-full bg-white/10" /><div className="absolute -bottom-32 -left-16 h-64 w-64 rounded-full bg-emerald-300/15" /><div className="relative"><h2 className="text-3xl font-black md:text-4xl">Siap memulai perjalanan belajarmu?</h2><p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-indigo-100 md:text-base">Pilih satu topik, pelajari satu lesson, dan jadikan setiap langkah berarti.</p><Link to="/courses" className="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-indigo-700 transition hover:bg-indigo-50">Jelajahi course <ArrowRight className="h-4 w-4" /></Link></div></div></section>
     </div>
   );
 };

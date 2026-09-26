@@ -123,9 +123,10 @@ npm run dev
 * [x] **Phase 0**: Master Project Context
 * [x] **Phase 1**: Architecture & ERD Planning
 * [x] **Phase 2**: Project Foundation (FastAPI + React Vite TS + Tailwind + TanStack Query)
-* [ ] **Phase 3**: Database & Migrations
-* [ ] **Phase 4**: Authentication & RBAC
-* [ ] **Phase 5**: Courses & Lessons
+* [x] **Phase 3**: Database & Migrations (catalog tables, Alembic migrations, and seed data)
+* [x] **Phase 4**: Authentication foundation (User model, Argon2, JWT, register/login/me/logout)
+* [x] **Phase 5**: Courses & Lessons read flow (database, public API, and frontend catalog)
+* [ ] **Phase 5b**: Admin Course/Lesson CRUD, enrollment, and lesson progress
 * [ ] **Phase 6**: Progress Tracking
 * [ ] **Phase 7**: Quizzes & Scoring
 * [ ] **Phase 8**: Student Dashboard

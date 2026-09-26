@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { HealthCheckResponse } from '@/types/api';
+import { DatabaseHealthCheckResponse, HealthCheckResponse } from '@/types/api';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
 
@@ -36,6 +36,10 @@ apiClient.interceptors.response.use(
 export const healthService = {
   checkHealth: async (): Promise<HealthCheckResponse> => {
     const response = await apiClient.get<HealthCheckResponse>('/health');
+    return response.data;
+  },
+  checkDatabase: async (): Promise<DatabaseHealthCheckResponse> => {
+    const response = await apiClient.get<DatabaseHealthCheckResponse>('/health/db');
     return response.data;
   },
 };

@@ -1,42 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { BookOpen, Compass, ShieldCheck } from 'lucide-react';
+import { BookOpen, Compass, LogIn, LogOut, UserCircle } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 
 export const Navbar: React.FC = () => {
-  return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200 group-hover:bg-indigo-700 transition">
-            <BookOpen className="w-5 h-5" />
-          </div>
-          <div>
-            <span className="text-xl font-bold tracking-tight text-slate-900">LITERA</span>
-            <span className="hidden sm:inline-block ml-2 text-xs font-medium px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
-              Foundation
-            </span>
-          </div>
-        </Link>
-
-        <nav className="flex items-center gap-6">
-          <Link
-            to="/"
-            className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition flex items-center gap-1.5"
-          >
-            <Compass className="w-4 h-4" />
-            Home
-          </Link>
-          <a
-            href="http://localhost:8000/docs"
-            target="_blank"
-            rel="noreferrer"
-            className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition flex items-center gap-1.5"
-          >
-            <ShieldCheck className="w-4 h-4" />
-            API Docs
-          </a>
-        </nav>
-      </div>
-    </header>
-  );
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const handleLogout = async () => { await logout(); navigate('/'); };
+  return <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/90 backdrop-blur-md"><div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"><Link to="/" className="group flex items-center gap-2.5"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-200 transition group-hover:bg-indigo-700"><BookOpen className="h-5 w-5" /></div><div><span className="text-xl font-bold tracking-tight text-slate-900">LITERA</span><span className="ml-2 hidden rounded-full border border-indigo-100 bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700 sm:inline-block">Learning</span></div></Link><nav className="flex items-center gap-3 sm:gap-5"><Link to="/" className="hidden items-center gap-1.5 text-sm font-medium text-slate-600 transition hover:text-indigo-600 sm:flex"><Compass className="h-4 w-4" />Home</Link><Link to="/courses" className="text-sm font-medium text-slate-600 transition hover:text-indigo-600">Courses</Link>{user ? <><Link to="/profile" className="hidden items-center gap-1.5 text-sm font-semibold text-slate-700 sm:flex"><UserCircle className="h-4 w-4" />{user.username}</Link><button onClick={handleLogout} className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-200"><LogOut className="h-4 w-4" />Logout</button></> : <Link to="/login" className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white hover:bg-indigo-700"><LogIn className="h-4 w-4" />Sign in</Link>}</nav></div></header>;
 };
